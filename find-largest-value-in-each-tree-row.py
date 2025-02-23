@@ -27,33 +27,27 @@ class Solution(object):
         """
         n = 9
 
-        rows = [set() for _ in range(0, n)]
-        cols = [set() for _ in range(0, n)]
+        rows = [set() for _ in range(0,n)]
+        cols = [set() for _ in range(0,n)]
         boxes = {}
 
-        for i in range(0, n):
-            for j in range(0, n):
+        for i in range(0,n):
+            for j in range(0,n):
                 value = board[i][j]
                 if value == ".":
                     continue
 
-                if value in rows[i]:
-                    print("inside row if")
-                    return False
-                rows[i].add(value)
-
-                if value in cols[j]:
-                    return False
-                cols[j].add(value)
-
-                r = i // 3
-                c = j // 3
+                r = i//3
+                c = j//3
                 k = str(r) + "," + str(c)
+
+                if value in rows[i] or value in cols[j] or (k in boxes and value in boxes[k]):
+                    return False
+                
+                rows[i].add(value)
+                cols[j].add(value)
                 if k in boxes:
-                    if value in boxes[k]:
-                        return False
-                    else:
-                        boxes[k].add(value)
+                    boxes[k].add(value)
                 else:
                     boxes[k] = set()
                     boxes[k].add(value)
