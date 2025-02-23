@@ -1,57 +1,52 @@
-# Time Complexity : O(n*m) - n is the number of rows and m is the number of cols
-# Since n and m are constant (9 and 9), we can consider overall time complexity as O(1)
-# Space Complexity : O(n*m) - n is the number of rows and m is the number of cols
-# Since n and m are constant (9 and 9), we can consider overall space complexity as O(1)
+# Time Complexity : O(n) - n is the number of nodes in tree
+# Space Complexity : O(n) - n is the number of nodes in tree, this is the queue
 # Did this code successfully run on Leetcode : yes
 # Any problem you faced while coding this : no
 
 """
 
-Maintain a list of sets for rows
-Maintain a list of sets for columns
-Maintain a hashmap with key as (r/3,c/3) and value as a set
-
-As (r/3.c/3) would be unique for each of the 9 boxes, we can use that as the key for the hashmap
-
-Iterate through the board and if the value is already there in that row or column or box then return False
-If no violation then return true at the end
+Do BFS and track the max element at each level and add it to the result array
 
 """
+from collections import deque
 
 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution(object):
-    def isValidSudoku(self, board):
+    def largestValues(self, root):
         """
-        :type board: List[List[str]]
-        :rtype: bool
+        :type root: Optional[TreeNode]
+        :rtype: List[int]
         """
-        n = 9
 
-        rows = [set() for _ in range(0,n)]
-        cols = [set() for _ in range(0,n)]
-        boxes = {}
+        result = []
 
-        for i in range(0,n):
-            for j in range(0,n):
-                value = board[i][j]
-                if value == ".":
-                    continue
+        if not root:
+            return result
 
-                r = i//3
-                c = j//3
-                k = str(r) + "," + str(c)
+        queue = deque()
+        queue.append(root)
 
-                if value in rows[i] or value in cols[j] or (k in boxes and value in boxes[k]):
-                    return False
-                
-                rows[i].add(value)
-                cols[j].add(value)
-                if k in boxes:
-                    boxes[k].add(value)
-                else:
-                    boxes[k] = set()
-                    boxes[k].add(value)
-        return True
+        while queue:
+            size = len(queue)
+            maxNumber = float("-inf")
+            for i in range(0, size):
+                node = queue.popleft()
+                if node.val > maxNumber:
+                    maxNumber = node.val
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            result.append(maxNumber)
+
+        return result
 
 
 
